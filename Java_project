@@ -1,0 +1,200 @@
+package arraysInJava;
+import java.util.*;
+import java.io.*;
+
+class LengthNotMatchingException extends Exception{
+	public void description() {
+		System.out.println("Description of each series");
+	}
+}
+class DataIndexSizeMisMatchException extends Exception{
+	public void description() {
+		System.out.println("Data size did not match. Please enter some differnet values.");
+	}
+}
+
+class Series{
+
+	HashMap<Integer,String> hm = new HashMap<>();
+	HashMap<Integer,Integer> hm2 = new HashMap<>();
+	Scanner sc = new Scanner(System.in);
+	int l1 = sc.nextInt();  			//length of key array
+	int l2 = sc.nextInt();  			//length of value array
+	int[] key= new int[l1];
+	int[] value=new int[l2];
+	int sum = 0;
+	int min=Integer.MAX_VALUE;
+	int max=Integer.MIN_VALUE;
+	
+	Series(){
+//		Series(HashMap<Integer,String> hm);		
+//		this(key,value);
+		sum();
+		mean();
+		min();
+		max();
+	}
+	
+	Series(HashMap<Integer, String> hm){
+		this.hm=hm;
+		hm.put(1, "one");
+		hm.put(2, "two");
+		hm.put(3, "three");
+		hm.put(4, "four");
+		hm.put(5, "five");
+		hm.put(6, "six");
+		hm.put(7, "seven");
+		hm.put(8, "eight");
+		hm.put(9, "nine");
+		hm.put(10, "ten");
+	}
+	Series(int[] key,int[] value){
+		this.key2=key;
+		this.value2=value;
+		try {
+			if(l1!=l2) {
+				throw new DataIndexSizeMisMatchException();
+			}
+			else {
+				for(int i=0;i<l1;i++) {
+					key[i]=sc.nextInt();
+					value[i]=sc.nextInt();
+					hm2.put(key[i], value[i]);
+				}
+			}
+		}
+		catch(DataIndexSizeMisMatchException data){
+			data.description();
+		}
+	}
+	void sum() {
+		for(int i=0;i<l1;i++) {
+			sum+= value[i];
+		}
+		System.out.println("sum " + sum);
+	}
+	void count() {
+		
+	}
+	void mean() {
+		double mean=sum/l2;
+		System.out.println("Mean is " + mean);
+	}
+	void first() {
+		System.out.println("The first element of the first series is" + hm.get(hm.keySet().toArray()[0]));
+		System.out.println("The first element of the second series is" + hm2.get(hm2.keySet().toArray()[0]));
+	}
+	void last() {
+		System.out.println("The last element of the first series is" + hm.get(hm.keySet().toArray()[-1]));
+		System.out.println("The last element of the second series is" + hm2.get(hm2.keySet().toArray()[0]));
+	}
+	void min() {
+		for(int i=0;i<l2;i++) {
+			if(value[i]<min) {
+				min=value[i];
+			}
+		}
+		System.out.println("The minimum value is " + min);
+	}
+	void max() {
+		for(int i=0;i<l2;i++) {
+			if(value[i]>max) {
+				max=value[i];
+			}
+		}
+		System.out.println("The maximum value is " + max);
+	}
+
+}
+
+
+class DataFrame{
+
+	Series obj1 = new Series();
+	HashMap<Integer,String> copy1=obj1.hm;
+	Series obj2 = new Series();
+	HashMap<Integer,Integer> copy2=obj2.hm2;
+	
+	ArrayList<Series> al = new ArrayList<>();  	
+	
+	DataFrame(){
+//		this();
+		shape();
+		head();
+		describe();
+	}
+
+	DataFrame(ArrayList<Series> al)
+	{
+		this.al=al;
+		al.add(obj1);
+		al.add(obj2);
+		try {											 // Created a try catch block for exception handling.
+			if(true) {
+				throw new LengthNotMatchingException();
+			}
+		}
+		catch(LengthNotMatchingException ex){
+			ex.description();
+		}
+ 	}
+	
+	
+	String shape() {									// The shape method that returns the dimensions of the DataFrame.
+		return "Shreshth";
+	}
+	void head() {										// The head function that prints the first 5 rows of the Dataframe.
+		for(int i=0;i<5;i++) {
+			System.out.println(al);
+		}
+	}
+	void describe()										// The description of the Dataframe.
+	{
+		System.out.println("Description");
+	}
+}
+
+
+class Project {
+
+	public static void main(String[] args) {
+		
+		ArrayList<Series> copy3=new ArrayList<>();
+		DataFrame obj3= new DataFrame();
+		System.out.println("Hey,there");
+		
+		System.out.println("List of Pokemon with there Stats:");
+		 
+		 String file = "src\\Pokemon.csv";  //Storing file path as string so that we can pass it into a object later
+       BufferedReader reader = null;  //BufferedReader for scanning files
+       String line = "";
+       
+       try {                         // Try reading the file and if there is a error print stacktrace
+      	 reader = new BufferedReader(new FileReader(file)); //FileReader will help read the file 
+      	 
+      	 while((line = reader.readLine()) != null) {   // While loop will first read a string and then store it in "line"
+      		
+      		 String[] row = line.split(",") ;          // It will create a string array called row that splits the lines by commas(since we are using csv)
+      		
+      		for(String index : row) {
+      			System.out.printf("%-11s", index);   // %s used for specifying format(strings) and 11 spaces of room is allocated to for each 
+      		}
+      		
+      		System.out.println();
+      	 }
+       }
+       
+       catch(Exception e) {
+      	 e.printStackTrace();      // If the location of file went missing or any other error happens this will let us know what went wrong
+       }
+       
+       finally {
+      	 try {
+				reader.close();   // closing our reader
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+       }
+	}
+	
+}
